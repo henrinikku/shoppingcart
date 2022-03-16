@@ -6,3 +6,10 @@
 - [ ] In some branches of the store, customers want the receipt to show the price first on each line. Without changing the IShoppingCart interface, add a way to support this which allows for other formatting options in the future.
 - [ ] One limitation of the codebase is that every time a change is made, many of the tests need updating. Update or replace the test suite to extend coverage and limit the number of tests which need updating when changes are introduced.
 - [ ] Improve the solution & tests. There are no rules/limitations other than conforming to the IShoppingCart interface - go crazy.
+
+## Sessions
+
+- **Wed 16. March (20 min)**
+  - Read through the problem description and source code
+  - Added 'Total' line to the receipt
+  - Added a test case to ensure items are printed in the order that they were scanned.
