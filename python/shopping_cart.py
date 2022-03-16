@@ -19,11 +19,20 @@ class ShoppingCart(IShoppingCart):
             self._contents[item_type] = number
         else:
             self._contents[item_type] = self._contents[item_type] + number
+    
+    @property
+    def total_price(self):
+        return sum(
+            self.pricer.get_price(item_type) * item_count
+            for item_type, item_count in self._contents.items()
+        )
 
     def print_receipt(self):
         for key, value in self._contents.items():
             price = self.pricer.get_price(key)
             print(f"{key} - {value} - {price}")
+        
+        print(f"Total price: {self.total_price}")   
 
 class ShoppingCartCreator(ABC):
     """

@@ -7,9 +7,17 @@ class ShoppingCartTest(unittest.TestCase):
     def test_print_receipt(self):
         sc = ShoppingCartConcreteCreator().operation()
         sc.add_item("apple", 2)
+        
         with Capturing() as output:
             sc.print_receipt()
-        self.assertEqual("apple - 2 - 100", output[0])
+
+        self.assertEqual(
+            output,
+            [
+                "apple - 2 - 100",
+                "Total price: 200",
+            ],
+        )
 
     def test_doesnt_explode_on_mystery_item(self):
         sc = ShoppingCartConcreteCreator().operation()

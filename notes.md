@@ -1,7 +1,7 @@
 # Notes
 
 ## TODO
-- [ ] Add a 'Total' line to the receipt. This should be the full price we should charge the customer.
+- [x] Add a 'Total' line to the receipt. This should be the full price we should charge the customer.
 - [ ] Make the receipt print items in the order that they were scanned.
 - [ ] In some branches of the store, customers want the receipt to show the price first on each line. Without changing the IShoppingCart interface, add a way to support this which allows for other formatting options in the future.
 - [ ] One limitation of the codebase is that every time a change is made, many of the tests need updating. Update or replace the test suite to extend coverage and limit the number of tests which need updating when changes are introduced.
