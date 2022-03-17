@@ -1,8 +1,8 @@
-from typing import List, Tuple
 import unittest
+from typing import List, Tuple
 
-from shopping_cart import ShoppingCartConcreteCreator
 from receipt import ReceiptFormatter, ReceiptItem, ReceiptItemFormat
+from shopping_cart import ShoppingCartConcreteCreator
 from test_utils import Capturing
 
 
