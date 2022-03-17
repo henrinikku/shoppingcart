@@ -1,5 +1,6 @@
 from abc import ABC
 
+
 class IShoppingCart(ABC):
     """
     Interface used by the existing shopping tills in our supermarket.
