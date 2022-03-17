@@ -1,17 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import Dict
+from receipt import ReceiptFormatter, ReceiptItem
 
 from shopping_cart_interface import IShoppingCart
 from pricer import Pricer
-
 
 class ShoppingCart(IShoppingCart):
     """
     Implementation of the shopping tills in our supermarket.
     """
-    def __init__(self, pricer: Pricer):
+    def __init__(self, pricer: Pricer, receipt_formatter: ReceiptFormatter):
         self.pricer = pricer
         self._contents: Dict[str,int] = {}
+        self.receipt_formatter = receipt_formatter
 
     def add_item(self, item_type: str, number: int):
         # adds new item to or update existing item in the shopping cart
@@ -19,20 +20,16 @@ class ShoppingCart(IShoppingCart):
             self._contents[item_type] = number
         else:
             self._contents[item_type] = self._contents[item_type] + number
-    
-    @property
-    def total_price(self):
-        return sum(
-            self.pricer.get_price(item_type) * item_count
-            for item_type, item_count in self._contents.items()
-        )
+
+    def get_receipt_items(self):
+        for item_name, item_count in self._contents.items():
+            price = self.pricer.get_price(item_name)
+            yield ReceiptItem(item_name, item_count, price)
 
     def print_receipt(self):
-        for key, value in self._contents.items():
-            price = self.pricer.get_price(key)
-            print(f"{key} - {value} - {price}")
-        
-        print(f"Total price: {self.total_price}")   
+        receipt_items = list(self.get_receipt_items())
+        receipt = self.receipt_formatter.get_receipt(receipt_items)
+        print(receipt)
 
 class ShoppingCartCreator(ABC):
     """
@@ -55,5 +52,4 @@ class ShoppingCartConcreteCreator(ShoppingCartCreator):
     Implements the factory_method
     """
     def factory_method(self) -> ShoppingCart:
-        # returns ShoppingCart object
-        return ShoppingCart(Pricer())
+        return ShoppingCart(Pricer(), ReceiptFormatter())
