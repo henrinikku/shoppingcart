@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from typing import Dict
 from receipt import ReceiptFormatter, ReceiptItem
 
@@ -11,15 +12,12 @@ class ShoppingCart(IShoppingCart):
     """
     def __init__(self, pricer: Pricer, receipt_formatter: ReceiptFormatter):
         self.pricer = pricer
-        self._contents: Dict[str,int] = {}
         self.receipt_formatter = receipt_formatter
+        self._contents: Dict[str,int] = defaultdict(int)
 
     def add_item(self, item_type: str, number: int):
         # adds new item to or update existing item in the shopping cart
-        if item_type not in self._contents:
-            self._contents[item_type] = number
-        else:
-            self._contents[item_type] = self._contents[item_type] + number
+        self._contents[item_type] += number
 
     def get_receipt_items(self):
         for item_name, item_count in self._contents.items():
