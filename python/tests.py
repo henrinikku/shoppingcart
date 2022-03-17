@@ -1,3 +1,4 @@
+from typing import List, Tuple
 import unittest
 
 from shopping_cart import ShoppingCartConcreteCreator
@@ -9,7 +10,7 @@ class ReceiptFormatterTest(unittest.TestCase):
     def setUp(self):
         self.receipt_formatter = ReceiptFormatter()
 
-    def test_get_normal_receipt(self):
+    def test_receipt_formatting(self):
         receipt = self.receipt_formatter.get_receipt(
             [
                 ReceiptItem("banana", 1, 10),
@@ -53,35 +54,39 @@ class ReceiptFormatterTest(unittest.TestCase):
 
 
 class ShoppingCartTest(unittest.TestCase):
-    def test_print_receipt(self):
-        sc = ShoppingCartConcreteCreator().operation()
-        sc.add_item("apple", 2)
+    def setUp(self):
+        self.sc = ShoppingCartConcreteCreator().operation()
+
+    def assert_shopping_cart_output(
+        self, items: Tuple[str, int], expected_output: List[str]
+    ):
+        for name, quantity in items:
+            self.sc.add_item(name, quantity)
 
         with Capturing() as output:
-            sc.print_receipt()
+            self.sc.print_receipt()
 
-        self.assertEqual(
-            output,
-            [
+        self.assertEqual(output, expected_output)
+
+    def test_print_receipt(self):
+        self.assert_shopping_cart_output(
+            items=[("apple", 2)],
+            expected_output=[
                 "apple - 2 - 100",
                 "Total price: 200",
             ],
         )
 
     def test_items_are_printed_in_the_order_they_were_added(self):
-        sc = ShoppingCartConcreteCreator().operation()
-        sc.add_item("banana", 5)
-        sc.add_item("apple", 2)
-        sc.add_item("third", 2)
-        sc.add_item("fourth", 2)
-        sc.add_item("fifth", 2)
-
-        with Capturing() as output:
-            sc.print_receipt()
-
-        self.assertEqual(
-            output,
-            [
+        self.assert_shopping_cart_output(
+            items=[
+                ("banana", 5),
+                ("apple", 2),
+                ("third", 2),
+                ("fourth", 2),
+                ("fifth", 2),
+            ],
+            expected_output=[
                 "banana - 5 - 200",
                 "apple - 2 - 100",
                 "third - 2 - 0",
@@ -92,15 +97,15 @@ class ShoppingCartTest(unittest.TestCase):
         )
 
     def test_doesnt_explode_on_mystery_item(self):
-        sc = ShoppingCartConcreteCreator().operation()
-        sc.add_item("apple", 2)
-        sc.add_item("banana", 5)
-        sc.add_item("pear", 5)
-        with Capturing() as output:
-            sc.print_receipt()
-        self.assertEqual("apple - 2 - 100", output[0])
-        self.assertEqual("banana - 5 - 200", output[1])
-        self.assertEqual("pear - 5 - 0", output[2])
+        self.assert_shopping_cart_output(
+            items=[("apple", 2), ("banana", 5), ("pear", 5)],
+            expected_output=[
+                "apple - 2 - 100",
+                "banana - 5 - 200",
+                "pear - 5 - 0",
+                "Total price: 1200",
+            ],
+        )
 
 
 unittest.main(exit=False)
