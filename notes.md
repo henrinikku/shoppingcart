@@ -8,13 +8,13 @@
 - [x] One limitation of the codebase is that every time a change is made, many of the tests need updating. Update or replace the test suite to extend coverage and limit the number of tests which need updating when changes are introduced.
 - [ ] Improve the solution & tests. There are no rules/limitations other than conforming to the IShoppingCart interface - go crazy.
   - [x] Use some inheritance-based pattern for specifying receipt formatting rules instead of enums.
-  - [ ] Make `Pricer` more extensible -- get rid of hard coded items etc.
   - [x] Create a class to represent items in a shopping cart that could be used by `ShoppingCart` and `ReceiptFormatter` classes.
-  - [ ] Add more test cases.
   - [x] Create a class to represent a receipt that could be constructed by the `ShoppingCart` class and passed on to, for example, the `ReceiptFormatter` class.
   - [x] Allow speficying different formatting rules for the 'Total' line as well.
-  - [ ] Add support for localization (i.e., different currencies etc).
+  - [x] Add more test cases.
   - [ ] Add comments/docstrings for classes.
+  - [ ] Add support for localization (i.e., different currencies etc).
+  - [ ] Make `Pricer` more extensible -- get rid of hard coded items etc.
 
 ## Sessions
 
