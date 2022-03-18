@@ -3,9 +3,23 @@ from typing import List, Tuple
 
 from item import Item
 from item_format import PriceFirstItemFormatter, PriceLastItemFormatter
+from receipt import Receipt
 from receipt_format import ReceiptFormatter
 from shopping_cart import ShoppingCartConcreteCreator
 from test_utils import Capturing
+
+
+class ReceiptTest(unittest.TestCase):
+    def test_total_price_calculation(self):
+        receipt = Receipt(
+            [
+                Item("banana", 10, 1),
+                Item("apple", 10, 12),
+                Item("orange", 99, 100),
+            ]
+        )
+
+        self.assertEqual(receipt.total_price, 10030)
 
 
 class ItemTest(unittest.TestCase):
@@ -38,11 +52,13 @@ class ReceiptFormatterTest(unittest.TestCase):
 
     def test_receipt_formatting(self):
         receipt = self.receipt_formatter.get_receipt(
-            [
-                Item("banana", 10, 1),
-                Item("apple", 10, 12),
-                Item("orange", 99, 100),
-            ]
+            Receipt(
+                [
+                    Item("banana", 10, 1),
+                    Item("apple", 10, 12),
+                    Item("orange", 99, 100),
+                ]
+            )
         )
 
         self.assertEqual(
@@ -59,22 +75,26 @@ class ReceiptFormatterTest(unittest.TestCase):
 
     def test_total_line_formatting(self):
         total_line = self.receipt_formatter.format_total(
-            [
-                Item("first", 100, 1),
-                Item("second", 0, 999),
-                Item("third", 2, 100),
-            ]
+            Receipt(
+                [
+                    Item("first", 100, 1),
+                    Item("second", 0, 999),
+                    Item("third", 2, 100),
+                ]
+            )
         )
 
         self.assertEqual(total_line, "Total price: 300")
 
     def test_total_line_is_formatted_for_zero_price(self):
         total_line = self.receipt_formatter.format_total(
-            [
-                Item("first", 100, 0),
-                Item("second", 100, 0),
-                Item("third", 100, 0),
-            ]
+            Receipt(
+                [
+                    Item("first", 100, 0),
+                    Item("second", 100, 0),
+                    Item("third", 100, 0),
+                ]
+            )
         )
 
         self.assertEqual(total_line, "Total price: 0")

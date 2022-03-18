@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from collections import defaultdict
 from typing import Dict
 
 from item import Item
 from item_format import PriceLastItemFormatter
 from pricer import Pricer
+from receipt import Receipt
 from receipt_format import ReceiptFormatter
 from shopping_cart_interface import IShoppingCart
 
@@ -28,9 +28,9 @@ class ShoppingCart(IShoppingCart):
         self._contents[item_type].count += number
 
     def print_receipt(self):
-        receipt_items = list(self._contents.values())
-        receipt = self.receipt_formatter.get_receipt(receipt_items)
-        print(receipt)
+        receipt = Receipt(list(self._contents.values()))
+        formatted_receipt = self.receipt_formatter.get_receipt(receipt)
+        print(formatted_receipt)
 
 
 class ShoppingCartCreator(ABC):
