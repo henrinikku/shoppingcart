@@ -39,4 +39,4 @@
   - Added comments for each class.
 - **Fri 18. March (25min)**
   - Refactored `Formatter` classes such that they now share the same base class and can be freely combined in `ReceiptFormatter`.
-  - Added `HeaderFormatter` as an example to showcase how formatters can now be more easily combined
+  - Added `HeaderFormatter` as an example to showcase how formatters can now be more easily combined. See [this test case](https://github.com/henrinikku/shoppingcart/blob/4acbc2b41146a83f97efe1b621452dc5876ca2df/python/tests.py#L186) for example usage.
