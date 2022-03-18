@@ -5,6 +5,11 @@ from item import Item
 
 @dataclass
 class Receipt:
+    """
+    Represents a receipt, i.e., contains items and implements calculations
+    that can be derived from said items without external dependencies.
+    """
+
     items: List[Item]
 
     @property

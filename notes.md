@@ -12,7 +12,7 @@
   - [x] Create a class to represent a receipt that could be constructed by the `ShoppingCart` class and passed on to, for example, the `ReceiptFormatter` class.
   - [x] Allow speficying different formatting rules for the 'Total' line as well.
   - [x] Add more test cases.
-  - [ ] Add comments/docstrings for classes.
+  - [x] Add comments/docstrings for classes.
   - [ ] Add support for localization (i.e., different currencies etc).
   - [ ] Make `Pricer` more extensible -- get rid of hard coded items etc.
 
