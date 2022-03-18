@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from receipt import Receipt
+from format import BaseFormatter
 
 
-class BaseTotalLineFormatter(ABC):
+class BaseTotalLineFormatter(BaseFormatter):
     """
     Base class for total line formatting implementations.
     """
@@ -10,6 +11,9 @@ class BaseTotalLineFormatter(ABC):
     @abstractmethod
     def format_total(self, receipt: Receipt):
         pass
+
+    def format(self, receipt: Receipt):
+        return [self.format_total(receipt)]
 
 
 class PriceOnlyTotalLineFormatter(BaseTotalLineFormatter):

@@ -2,12 +2,10 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 from item import Item
-from item_format import PriceLastItemFormatter
 from pricer import Pricer
 from receipt import Receipt
-from receipt_format import ReceiptFormatter
+from receipt_format import ReceiptFormatter, ReceiptFormatterConcreteCreator
 from shopping_cart_interface import IShoppingCart
-from total_line_format import PriceOnlyTotalLineFormatter
 
 
 class ShoppingCart(IShoppingCart):
@@ -58,8 +56,5 @@ class ShoppingCartConcreteCreator(ShoppingCartCreator):
     """
 
     def factory_method(self) -> ShoppingCart:
-        item_formatter = PriceLastItemFormatter()
-        total_line_formatter = PriceOnlyTotalLineFormatter()
-        return ShoppingCart(
-            Pricer(), ReceiptFormatter(item_formatter, total_line_formatter)
-        )
+        receipt_formatter_creator = ReceiptFormatterConcreteCreator()
+        return ShoppingCart(Pricer(), receipt_formatter_creator.operation())

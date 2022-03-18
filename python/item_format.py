@@ -1,15 +1,21 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
 from item import Item
+from format import BaseFormatter
+from receipt import Receipt
 
 
-class BaseItemFormatter(ABC):
+class BaseItemFormatter(BaseFormatter):
     """
     Base class for item formatting implementations.
     """
 
     @abstractmethod
-    def format_item(self, item: Item):
+    def format_item(self, item: Item) -> str:
         pass
+
+    def format(self, receipt: Receipt):
+        return list(map(self.format_item, receipt.items))
 
 
 class PriceFirstItemFormatter(BaseItemFormatter):

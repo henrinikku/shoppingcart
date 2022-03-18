@@ -13,6 +13,7 @@
   - [x] Allow speficying different formatting rules for the 'Total' line as well.
   - [x] Add more test cases.
   - [x] Add comments/docstrings for classes.
+  - [x] Make it easier to form and combine receipt formatting configurations by refactoring formatter classes such that they all share the same base class and `format` function signature.
   - [ ] Add support for localization (i.e., different currencies etc).
   - [ ] Make `Pricer` more extensible -- get rid of hard coded items etc.
 
@@ -35,3 +36,6 @@
   - Added an option to specify different formatting rules for the 'Total' line as well.
   - Added the `Receipt` class to represent receipts.
   - Added comments for each class.
+- **Fri 18. March (25min)**
+  - Refactored `Formatter` classes such that they now share the same base class and can be freely combined in `ReceiptFormatter`.
+  - Added `HeaderFormatter` as an example to showcase how formatters can now be more easily combined

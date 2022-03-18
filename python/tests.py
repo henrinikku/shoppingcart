@@ -1,10 +1,11 @@
 import unittest
 from typing import List, Tuple
 
+from header_format import HeaderFormatter
 from item import Item
 from item_format import PriceFirstItemFormatter, PriceLastItemFormatter
 from receipt import Receipt
-from receipt_format import ReceiptFormatter
+from receipt_format import ReceiptFormatter, ReceiptFormatterConcreteCreator
 from shopping_cart import ShoppingCartConcreteCreator
 from test_utils import Capturing
 from total_line_format import ItemCountTotalLineFormatter, PriceOnlyTotalLineFormatter
@@ -42,6 +43,15 @@ class ItemTest(unittest.TestCase):
     def test_total_price_calculation_with_free_price(self):
         item = Item("foo", 0, 10)
         self.assertEqual(item.total_price, 0)
+
+
+class HeaderFormatterTest(unittest.TestCase):
+    def test_header_formatting(self):
+        header_formatter = HeaderFormatter("TEST HEADER")
+
+        header_line = header_formatter.format(Receipt([Item("ignored", 0, 0)]))
+
+        self.assertEqual(header_line, ["TEST HEADER"])
 
 
 class TotalLineFormatterTest(unittest.TestCase):
@@ -122,9 +132,7 @@ class ItemFormatterTest(unittest.TestCase):
 
 class ReceiptFormatterTest(unittest.TestCase):
     def setUp(self):
-        self.receipt_formatter = ReceiptFormatter(
-            PriceLastItemFormatter(), PriceOnlyTotalLineFormatter()
-        )
+        self.receipt_formatter = ReceiptFormatterConcreteCreator().operation()
 
     def test_receipt_formatting(self):
         receipt = self.receipt_formatter.get_receipt(
@@ -169,6 +177,28 @@ class ShoppingCartTest(unittest.TestCase):
         self.assert_shopping_cart_output(
             items=[("apple", 2)],
             expected_output=[
+                "apple - 2 - 100",
+                "Total price: 200",
+            ],
+        )
+
+    def test_print_receipt_with_header(self):
+        self.shopping_cart.receipt_formatter = ReceiptFormatter(
+            (
+                HeaderFormatter("RECEIPT"),
+                PriceLastItemFormatter(),
+                PriceOnlyTotalLineFormatter(),
+            )
+        )
+        self.shopping_cart.add_item("apple", 2)
+
+        with Capturing() as output:
+            self.shopping_cart.print_receipt()
+
+        self.assertEqual(
+            output,
+            [
+                "RECEIPT",
                 "apple - 2 - 100",
                 "Total price: 200",
             ],
