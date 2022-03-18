@@ -2,8 +2,10 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from typing import Dict
 
+from item import Item
+from item_format import PriceLastItemFormatter
 from pricer import Pricer
-from receipt import ReceiptFormatter, ReceiptItem
+from receipt import ReceiptFormatter
 from shopping_cart_interface import IShoppingCart
 
 
@@ -15,19 +17,18 @@ class ShoppingCart(IShoppingCart):
     def __init__(self, pricer: Pricer, receipt_formatter: ReceiptFormatter):
         self.pricer = pricer
         self.receipt_formatter = receipt_formatter
-        self._contents: Dict[str, int] = defaultdict(int)
+        self._contents: Dict[str, Item] = {}
 
     def add_item(self, item_type: str, number: int):
         # adds new item to or update existing item in the shopping cart
-        self._contents[item_type] += number
+        if item_type not in self._contents:
+            price = self.pricer.get_price(item_type)
+            self._contents[item_type] = Item(item_type, price)
 
-    def get_receipt_items(self):
-        for item_name, item_count in self._contents.items():
-            price = self.pricer.get_price(item_name)
-            yield ReceiptItem(item_name, item_count, price)
+        self._contents[item_type].count += number
 
     def print_receipt(self):
-        receipt_items = list(self.get_receipt_items())
+        receipt_items = list(self._contents.values())
         receipt = self.receipt_formatter.get_receipt(receipt_items)
         print(receipt)
 
@@ -56,4 +57,5 @@ class ShoppingCartConcreteCreator(ShoppingCartCreator):
     """
 
     def factory_method(self) -> ShoppingCart:
-        return ShoppingCart(Pricer(), ReceiptFormatter())
+        item_formatter = PriceLastItemFormatter()
+        return ShoppingCart(Pricer(), ReceiptFormatter(item_formatter))

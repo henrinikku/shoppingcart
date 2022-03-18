@@ -1,21 +1,47 @@
 import unittest
 from typing import List, Tuple
 
-from receipt import ReceiptFormatter, ReceiptItem, ReceiptItemFormat
+from item import Item
+from item_format import PriceFirstItemFormatter, PriceLastItemFormatter
+from receipt import ReceiptFormatter
 from shopping_cart import ShoppingCartConcreteCreator
 from test_utils import Capturing
 
 
+class ItemTest(unittest.TestCase):
+    def test_total_price_calculation(self):
+        item = Item("foo", 9, 10)
+        self.assertEqual(item.total_price, 90)
+
+    def test_total_price_calculation_with_free_price(self):
+        item = Item("foo", 0, 10)
+        self.assertEqual(item.total_price, 0)
+
+
+class ItemFormatterTest(unittest.TestCase):
+    def test_item_line_formatting_with_price_last(self):
+        item_formatter = PriceLastItemFormatter()
+
+        item_line = item_formatter.format_item(Item("banana", 2, 1))
+        self.assertEqual(item_line, "banana - 1 - 2")
+
+    def test_item_line_formatting_with_price_first(self):
+        item_formatter = PriceFirstItemFormatter()
+
+        item_line = item_formatter.format_item(Item("banana", 2, 1))
+        self.assertEqual(item_line, "2 - banana - 1")
+
+
 class ReceiptFormatterTest(unittest.TestCase):
     def setUp(self):
-        self.receipt_formatter = ReceiptFormatter()
+        self.receipt_formatter = ReceiptFormatter(PriceLastItemFormatter())
 
     def test_receipt_formatting(self):
         receipt = self.receipt_formatter.get_receipt(
             [
-                ReceiptItem("banana", 1, 10),
-                ReceiptItem("apple", 12, 10),
-                ReceiptItem("orange", 100, 99),
+                Item("banana", 10, 1),
+                Item("apple", 10, 12),
+                Item("orange", 99, 100),
             ]
         )
 
@@ -31,40 +57,41 @@ class ReceiptFormatterTest(unittest.TestCase):
             ),
         )
 
-    def test_total_price_calculation(self):
+    def test_total_line_formatting(self):
         total_line = self.receipt_formatter.format_total(
             [
-                ReceiptItem("first", 1, 100),
-                ReceiptItem("second", 999, 0),
-                ReceiptItem("third", 100, 2),
+                Item("first", 100, 1),
+                Item("second", 0, 999),
+                Item("third", 2, 100),
             ]
         )
 
         self.assertEqual(total_line, "Total price: 300")
 
-    def test_item_line_formatting_with_price_last(self):
-        item_line = self.receipt_formatter.format_item(ReceiptItem("banana", 1, 2))
-        self.assertEqual(item_line, "banana - 1 - 2")
+    def test_total_line_is_formatted_for_zero_price(self):
+        total_line = self.receipt_formatter.format_total(
+            [
+                Item("first", 100, 0),
+                Item("second", 100, 0),
+                Item("third", 100, 0),
+            ]
+        )
 
-    def test_item_line_formatting_with_price_first(self):
-        self.receipt_formatter.receipt_item_format = ReceiptItemFormat.price_first
-
-        item_line = self.receipt_formatter.format_item(ReceiptItem("banana", 1, 2))
-        self.assertEqual(item_line, "2 - banana - 1")
+        self.assertEqual(total_line, "Total price: 0")
 
 
 class ShoppingCartTest(unittest.TestCase):
     def setUp(self):
-        self.sc = ShoppingCartConcreteCreator().operation()
+        self.shopping_cart = ShoppingCartConcreteCreator().operation()
 
     def assert_shopping_cart_output(
         self, items: Tuple[str, int], expected_output: List[str]
     ):
         for name, quantity in items:
-            self.sc.add_item(name, quantity)
+            self.shopping_cart.add_item(name, quantity)
 
         with Capturing() as output:
-            self.sc.print_receipt()
+            self.shopping_cart.print_receipt()
 
         self.assertEqual(output, expected_output)
 
