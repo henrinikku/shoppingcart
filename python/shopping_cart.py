@@ -5,7 +5,7 @@ from typing import Dict
 from item import Item
 from item_format import PriceLastItemFormatter
 from pricer import Pricer
-from receipt import ReceiptFormatter
+from receipt_format import ReceiptFormatter
 from shopping_cart_interface import IShoppingCart
 
 

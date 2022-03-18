@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from item import Item
 from item_format import PriceFirstItemFormatter, PriceLastItemFormatter
-from receipt import ReceiptFormatter
+from receipt_format import ReceiptFormatter
 from shopping_cart import ShoppingCartConcreteCreator
 from test_utils import Capturing
 
