@@ -45,7 +45,7 @@ gradle test
 ## Python implementation
 
 ### Dependencies
-  python3.7+
+  python3.9.7
 
 ### Run tests
 ```
