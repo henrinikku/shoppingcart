@@ -14,6 +14,7 @@
   - [ ] Create a class to represent a receipt that could be constructed by the `ShoppingCart` class and passed on to, for example, the `ReceiptFormatter` class.
   - [ ] Allow speficying different formatting rules for the 'Total' line as well.
   - [ ] Add support for localization (i.e., different currencies etc).
+  - [ ] Add comments/docstrings for classes.
 
 ## Sessions
 
