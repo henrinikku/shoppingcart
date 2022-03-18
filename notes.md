@@ -27,7 +27,7 @@
   - Reduced the amount boilerplate in `ShoppingCart` test cases
   - Minor readability improvements to `ShoppingCart` class
   - Started using `black` for formatting
-- **Fri 18. March (35min)**
+- **Fri 18. March (45min)**
   - Added an `Item` class to represent items.
   - Added `ItemFormatter` classes to represent the enum based implementation for specifying receipt item formatting rules.
   - Added test cases.
