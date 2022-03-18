@@ -14,6 +14,7 @@
   - [x] Add more test cases.
   - [x] Add comments/docstrings for classes.
   - [x] Make it easier to form and combine receipt formatting configurations by refactoring formatter classes such that they all share the same base class and `format` function signature.
+  - [ ] Split modules into different folders
   - [ ] Add support for localization (i.e., different currencies etc).
   - [ ] Make `Pricer` more extensible -- get rid of hard coded items etc.
 
