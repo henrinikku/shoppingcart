@@ -7,6 +7,7 @@ from receipt import Receipt
 from receipt_format import ReceiptFormatter
 from shopping_cart import ShoppingCartConcreteCreator
 from test_utils import Capturing
+from total_line_format import ItemCountTotalLineFormatter, PriceOnlyTotalLineFormatter
 
 
 class ReceiptTest(unittest.TestCase):
@@ -21,6 +22,17 @@ class ReceiptTest(unittest.TestCase):
 
         self.assertEqual(receipt.total_price, 10030)
 
+    def test_total_items_calculation(self):
+        receipt = Receipt(
+            [
+                Item("banana", 10, 1),
+                Item("apple", 10, 12),
+                Item("orange", 99, 100),
+            ]
+        )
+
+        self.assertEqual(receipt.total_items, 113)
+
 
 class ItemTest(unittest.TestCase):
     def test_total_price_calculation(self):
@@ -30,6 +42,68 @@ class ItemTest(unittest.TestCase):
     def test_total_price_calculation_with_free_price(self):
         item = Item("foo", 0, 10)
         self.assertEqual(item.total_price, 0)
+
+
+class TotalLineFormatterTest(unittest.TestCase):
+    def test_total_line_formatting(self):
+        total_line_formatter = PriceOnlyTotalLineFormatter()
+
+        total_line = total_line_formatter.format_total(
+            Receipt(
+                [
+                    Item("first", 100, 1),
+                    Item("second", 0, 999),
+                    Item("third", 2, 100),
+                ]
+            )
+        )
+
+        self.assertEqual(total_line, "Total price: 300")
+
+    def test_total_line_is_formatted_for_zero_price(self):
+        total_line_formatter = PriceOnlyTotalLineFormatter()
+
+        total_line = total_line_formatter.format_total(
+            Receipt(
+                [
+                    Item("first", 100, 0),
+                    Item("second", 100, 0),
+                    Item("third", 100, 0),
+                ]
+            )
+        )
+
+        self.assertEqual(total_line, "Total price: 0")
+
+    def test_total_line_formatting_with_only_price(self):
+        total_line_formatter = PriceOnlyTotalLineFormatter()
+
+        total_line = total_line_formatter.format_total(
+            Receipt(
+                [
+                    Item("banana", 10, 1),
+                    Item("apple", 10, 12),
+                    Item("orange", 99, 100),
+                ]
+            )
+        )
+
+        self.assertEqual(total_line, "Total price: 10030")
+
+    def test_total_line_formatting_with_item_count(self):
+        total_line_formatter = ItemCountTotalLineFormatter()
+
+        total_line = total_line_formatter.format_total(
+            Receipt(
+                [
+                    Item("banana", 10, 1),
+                    Item("apple", 10, 12),
+                    Item("orange", 99, 100),
+                ]
+            )
+        )
+
+        self.assertEqual(total_line, "Total price (113 items): 10030")
 
 
 class ItemFormatterTest(unittest.TestCase):
@@ -48,7 +122,9 @@ class ItemFormatterTest(unittest.TestCase):
 
 class ReceiptFormatterTest(unittest.TestCase):
     def setUp(self):
-        self.receipt_formatter = ReceiptFormatter(PriceLastItemFormatter())
+        self.receipt_formatter = ReceiptFormatter(
+            PriceLastItemFormatter(), PriceOnlyTotalLineFormatter()
+        )
 
     def test_receipt_formatting(self):
         receipt = self.receipt_formatter.get_receipt(
@@ -72,32 +148,6 @@ class ReceiptFormatterTest(unittest.TestCase):
                 ]
             ),
         )
-
-    def test_total_line_formatting(self):
-        total_line = self.receipt_formatter.format_total(
-            Receipt(
-                [
-                    Item("first", 100, 1),
-                    Item("second", 0, 999),
-                    Item("third", 2, 100),
-                ]
-            )
-        )
-
-        self.assertEqual(total_line, "Total price: 300")
-
-    def test_total_line_is_formatted_for_zero_price(self):
-        total_line = self.receipt_formatter.format_total(
-            Receipt(
-                [
-                    Item("first", 100, 0),
-                    Item("second", 100, 0),
-                    Item("third", 100, 0),
-                ]
-            )
-        )
-
-        self.assertEqual(total_line, "Total price: 0")
 
 
 class ShoppingCartTest(unittest.TestCase):
