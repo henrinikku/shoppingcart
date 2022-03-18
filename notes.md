@@ -11,7 +11,7 @@
   - [ ] Make `Pricer` more extensible -- get rid of hard coded items etc.
   - [x] Create a class to represent items in a shopping cart that could be used by `ShoppingCart` and `ReceiptFormatter` classes.
   - [ ] Add more test cases.
-  - [ ] Create a class to represent a receipt that could be constructed by the `ShoppingCart` class and passed on to, for example, the `ReceiptFormatter` class.
+  - [x] Create a class to represent a receipt that could be constructed by the `ShoppingCart` class and passed on to, for example, the `ReceiptFormatter` class.
   - [ ] Allow speficying different formatting rules for the 'Total' line as well.
   - [ ] Add support for localization (i.e., different currencies etc).
   - [ ] Add comments/docstrings for classes.
