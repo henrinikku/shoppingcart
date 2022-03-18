@@ -155,7 +155,7 @@ class ShoppingCartTest(unittest.TestCase):
         self.shopping_cart = ShoppingCartConcreteCreator().operation()
 
     def assert_shopping_cart_output(
-        self, items: Tuple[str, int], expected_output: List[str]
+        self, items: List[Tuple[str, int]], expected_output: List[str]
     ):
         for name, quantity in items:
             self.shopping_cart.add_item(name, quantity)
